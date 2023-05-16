@@ -8,8 +8,8 @@ def new_client(client, server):
     server.send_message_to_all("This is ground control to TWELITE SPOT")
 
 def new_message(client, server, message):
-    print("Received an App_Wings-formatted message:")
-    print(message, end="")
+    print("Received an message:")
+    print(message)
 
 server = WebsocketServer(host="YOUR IP ADDRESS", port=8080, loglevel=logging.INFO)
 server.set_fn_new_client(new_client)
