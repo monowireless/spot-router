@@ -81,13 +81,13 @@ void setup() {
         }
         case WStype_CONNECTED: {
             Serial.print("Connected to url: ");
-            Serial.println(payload);
+            Serial.println(reinterpret_cast<char*>(payload));
             webSocket.sendTXT("This is TWELITE SPOT to ground control");
             break;
         }
         case WStype_TEXT: {
             Serial.print("Got text: ");
-            Serial.println(payload);
+            Serial.println(reinterpret_cast<char*>(payload));
             break;
         }
         default: break;
