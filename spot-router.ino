@@ -54,7 +54,7 @@ void setup() {
     //// Any
     Twelite.on([](const BarePacket& packet) {
         String packetStr = createPacketStringFrom(packet);
-        if (not (packetStr.length() <= 0)) {
+        if (not(packetStr.length() <= 0)) {
             webSocket.sendTXT(packetStr.c_str());
         }
     });
@@ -64,7 +64,8 @@ void setup() {
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     Serial.print("Connecting to WiFi ..");
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.print('.'); delay(500);
+        Serial.print('.');
+        delay(500);
     }
     Serial.print("\nConnected. IP: ");
     Serial.println(WiFi.localIP().toString().c_str());
@@ -73,18 +74,20 @@ void setup() {
     webSocket.begin(WS_SERVER_IP, WS_SERVER_PORT, WS_SERVER_PATH);
     webSocket.setReconnectInterval(5000);
     webSocket.onEvent([](WStype_t type, uint8_t* payload, size_t length) {
-        switch(type) {
+        switch (type) {
         case WStype_DISCONNECTED: {
-            Serial.printf("Disconnected!\n");
+            Serial.println("Disconnected!");
             break;
         }
         case WStype_CONNECTED: {
-            Serial.printf("Connected to url: %s\n", payload);
+            Serial.print("Connected to url: ");
+            Serial.println(payload);
             webSocket.sendTXT("This is TWELITE SPOT to ground control");
             break;
         }
         case WStype_TEXT: {
-            Serial.printf("Got text: %s\n", payload);
+            Serial.print("Got text: ");
+            Serial.println(payload);
             break;
         }
         default: break;
