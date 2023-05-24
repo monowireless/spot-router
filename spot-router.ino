@@ -10,6 +10,9 @@
 // Mono Wireless TWELITE Wings API for 32-bit Arduinos
 #include <MWings.h>
 
+// Local configs
+#include "config.h"
+
 // Pin defs
 const uint8_t TWE_RST = 5;
 const uint8_t TWE_PRG = 4;
@@ -22,15 +25,6 @@ const uint8_t TWE_CH = 18;
 const uint32_t TWE_APPID = 0x67720102;
 const uint8_t TWE_RETRY = 2;
 const uint8_t TWE_POWER = 3;
-
-// Wi-Fi defs
-const char* WIFI_SSID = "YOUR SSID";
-const char* WIFI_PASSWORD = "YOUR PASSWORD";
-
-// WebSocket defs
-const char* WS_SERVER_IP = "YOUR ADDRESS";
-const int WS_SERVER_PORT = 8080;
-const char* WS_SERVER_PATH = "/";
 
 // Global objects
 WebSocketsClient webSocket;
@@ -61,11 +55,19 @@ void setup() {
 
     // Init Wi-Fi
     WiFi.mode(WIFI_STA);
+    WiFi.setAutoReconnect(true);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     Serial.print("Connecting to WiFi ..");
     while (WiFi.status() != WL_CONNECTED) {
+        static int count = 0;
         Serial.print('.');
         delay(500);
+        // Retry every 5 seconds
+        if (count++ % 10 == 0) {
+            WiFi.disconnect();
+            WiFi.reconnect();
+            Serial.print('!');
+        }
     }
     Serial.print("\nConnected. IP: ");
     Serial.println(WiFi.localIP().toString().c_str());
